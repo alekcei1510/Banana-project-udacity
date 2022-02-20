@@ -2,6 +2,7 @@ from unityagents import UnityEnvironment
 import numpy as np
 from agent.dqn_agent import Agent
 from collections import deque
+import torch
 
 # please do not modify the line below
 env = UnityEnvironment(file_name="deep-reinforcement-learning/p1_navigation/Banana_Windows_x86_64/Banana.exe")
@@ -23,7 +24,7 @@ action_size = brain.vector_action_space_size
 state = env_info.vector_observations[0]
 state_size = len(state)
 
-#}
+#
 # Main hyperparams
 BUFFER_SIZE = int(1e6)  # replay buffer size
 BATCH_SIZE = 128         # minibatch size
@@ -60,7 +61,6 @@ agent_dqn = Agent(**params)
 
 scores = deque(maxlen=100)
 
-eps = start_eps
 for i_episode in range(2000):
     env_info = env.reset(train_mode=True)[brain_name]  # reset the environment
     score = 0
@@ -85,8 +85,12 @@ for i_episode in range(2000):
             break
 
     # Adjust e-greedy exploration for each episSode
-    eps = max(eps *eps_decay, min_eps)
+    eps = max(eps * eps_decay, min_eps)
     scores.append(score)
+
+    if np.mean(scores) >= 13.0:
+        rounded_score = round(np.mean(scores))
+        torch.save(agent_dqn.qnetwork_online.state_dict(), f'trained_agents/checkpoint_{rounded_score}.pth')
 
     print(f"Episode {i_episode} and score: {score} and eps {round(eps,2)}", end='\r')
 
