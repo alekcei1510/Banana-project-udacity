@@ -12,7 +12,7 @@ brain_name = env.brain_names[0]
 brain = env.brains[brain_name]
 
 # reset the environment
-env_info = env.reset(train_mode=True)[brain_name]
+env_info = env.reset(train_mode=False)[brain_name]
 
 # number of agents in the environment
 print('Number of agents:', len(env_info.agents))
@@ -34,14 +34,14 @@ TAU = 1e-3           # for soft update of target parameters
 LR = 1e-4
 # learning rate
 UPDATE_EVERY = 2        # how often to update the network
-start_eps = 0.6
+start_eps = 0.01
 eps = start_eps
 min_eps = 0.01
 eps_decay = 0.98
 
 seed = 13
 
-agent_type = "vanilla_dqn" # vanilla_dqn, double_dqn
+agent_type = "double_dqn" # vanilla_dqn, double_dqn
 params = {
           "state_size": len(state),
           "action_size": action_size,
@@ -56,15 +56,19 @@ params = {
           "type_dqn": agent_type
          }
 
+
 agent_dqn = Agent(**params)
+
+agent_dqn.qnetwork_online.load_state_dict(torch.load(f"trained_agents/checkpoint_{agent_type}.pth"))
+agent_dqn.qnetwork_target.load_state_dict(torch.load(f"trained_agents/checkpoint_{agent_type}.pth"))
 
 all_scores = []
 scores = deque(maxlen=100)
 sim_episodes = 1000
 early_stop = True
 
-for i_episode in range(sim_episodes):
-    env_info = env.reset(train_mode=True)[brain_name]  # reset the environment
+for i_episode in range(10):
+    env_info = env.reset(train_mode=False)[brain_name]  # reset the environment
     score = 0
 
     while True:
@@ -77,8 +81,6 @@ for i_episode in range(sim_episodes):
         reward = env_info.rewards[0]  # get the reward
         done = env_info.local_done[0]
 
-        agent_dqn.step(state, action, reward, next_state, done)
-
         # see if episode has finished
         print(f"Reward: {reward} ", end='\r')
         score += reward  # update the score
@@ -87,16 +89,8 @@ for i_episode in range(sim_episodes):
             break
 
     # Adjust e-greedy exploration for each episSode
-    eps = max(eps * eps_decay, min_eps)
     scores.append(score)
     all_scores.append([i_episode, scores])
-
-    if np.mean(scores) >= 13.0:
-        rounded_score = int(round(np.mean(scores)))
-        torch.save(agent_dqn.qnetwork_online.state_dict(), f'trained_agents/checkpoint_{agent_type}.pth')
-        if early_stop:
-            print(f"Challenge resolved in {i_episode} episodes with an overall score of 13+ over 100 episodes")
-            break
 
     print(f"Episode {i_episode} and score: {score} and eps {round(eps,2)}", end='\r')
 
