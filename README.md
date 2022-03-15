@@ -1,6 +1,6 @@
 **DRLND Banana Navigation Project**
 
-This project reflects the knowledge acquired of the first module of reinforcemente learning with an applied project.   
+This project reflects the knowledge acquired of the first module of reinforcement learning with an applied project.   
 
 The main objective of the banana navigation problem is to collect yellow bananas and avoid the blue ones. To complete successfully the change, the agent needs to perform above an average of 13 points over 100 episodes.  
 
@@ -76,3 +76,7 @@ You can explore more configurations and how it affects the performance of the ag
 
 
 ## Play with the agent
+You can run the agent trained with the script `run_agent.py`, the default configuration is windows on the line `env = UnityEnvironment(file_name="deep-reinforcement-learning/p1_navigation/Banana_Windows_x86_64/Banana.exe")`
+
+The expected output is something like this: 
+![](banana_project.png)
