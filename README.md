@@ -80,14 +80,29 @@ Finally, reference the file like this:
 
 in the `train_agent.py` file to run the project.
 
+
 ## Train the agent
 
 The default configuration is one of the chosen after many simulations and it works very well to resolve the change. 
 You can explore more configurations and how it affects the performance of the agent. The main file to train the agent is `train_agent.py` and the file of trained weights can be found on the directory of `trained_agents`.
 
+### Plot of rewards in the training step: 
+
+![Alt text](rewards.png?raw=true "Plot of Rewards")
+
 
 ## Play with the agent
 You can run the agent trained with the script `run_agent.py`, the default configuration is windows on the line `env = UnityEnvironment(file_name="deep-reinforcement-learning/p1_navigation/Banana_Windows_x86_64/Banana.exe")`
 
-The expected output is something is: 
+
+
+The expected output is:
+ 
 ![](banana_project.png)
+
+
+## Ideas for Future Work
+
+It can be explored more improvements in the architectures. For example implement the prioritized experiences replay or the rainbow design where it combines all of 3 implementations. 
+
+On the other hand, it can be more challenge with raw data of pixels, combining image processing and DQN algorithms. 

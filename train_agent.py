@@ -41,7 +41,7 @@ eps_decay = 0.98
 
 seed = 13
 
-agent_type = "vanilla_dqn" # vanilla_dqn, double_dqn
+agent_type = "double_dqn" # vanilla_dqn, double_dqn
 params = {
           "state_size": len(state),
           "action_size": action_size,
@@ -89,7 +89,7 @@ for i_episode in range(sim_episodes):
     # Adjust e-greedy exploration for each episSode
     eps = max(eps * eps_decay, min_eps)
     scores.append(score)
-    all_scores.append([i_episode, scores])
+    all_scores.append([i_episode, score])
 
     if np.mean(scores) >= 13.0:
         rounded_score = int(round(np.mean(scores)))
@@ -103,3 +103,17 @@ for i_episode in range(sim_episodes):
     if i_episode % 10 == 0:
         print(f"Episode number {i_episode} with  average score of {np.mean(scores)} and eps {round(eps,2)}")
 
+##
+import pandas as pd
+import seaborn as sns
+sns.set()
+
+import matplotlib.pyplot as plt
+df = pd.DataFrame(all_scores, columns=['episode','reward'])
+df['mean'] = df['reward'].rolling(window=5).mean()
+#ax1 = df.plot.line(x='episode',
+#                       y='reward',
+#                      c='DarkBlue')
+sns.regplot(x='episode',y='reward',data=df, fit_reg=True)
+
+plt.show()
