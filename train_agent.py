@@ -1,3 +1,4 @@
+##
 from unityagents import UnityEnvironment
 import numpy as np
 from agent.dqn_agent import Agent
@@ -5,7 +6,7 @@ from collections import deque
 import torch
 
 # please do not modify the line below
-env = UnityEnvironment(file_name="deep-reinforcement-learning/p1_navigation/Banana_Windows_x86_64/Banana.exe")
+env = UnityEnvironment(file_name="Banana.app")
 
 # get the default brain
 brain_name = env.brain_names[0]
@@ -91,7 +92,7 @@ for i_episode in range(sim_episodes):
     scores.append(score)
     all_scores.append([i_episode, score])
 
-    if np.mean(scores) >= 13.0:
+    if i_episode == 230:#np.mean(scores) >= 13.0:
         rounded_score = int(round(np.mean(scores)))
         torch.save(agent_dqn.qnetwork_online.state_dict(), f'trained_agents/checkpoint_{agent_type}.pth')
         if early_stop:
@@ -111,9 +112,28 @@ sns.set()
 import matplotlib.pyplot as plt
 df = pd.DataFrame(all_scores, columns=['episode','reward'])
 df['mean'] = df['reward'].rolling(window=5).mean()
+##
+
+fig, ax = plt.subplots()
+
+df_1 = pd.read_csv(f"double_dqn.csv")
+df_2 = pd.read_csv(f"vanilla_dqn.csv")
+
 #ax1 = df.plot.line(x='episode',
 #                       y='reward',
 #                      c='DarkBlue')
-sns.regplot(x='episode',y='reward',data=df, fit_reg=True)
+l = sns.regplot(x='episode',
+                y='reward',data=df_1,
+                fit_reg=True,
+                label='double_dqn',
+                ax=ax)
 
+r = sns.regplot(x='episode',
+                y='reward',
+                data=df_2,
+                fit_reg=True,
+                label='vanilla_dqn',
+                ax=ax)
+
+plt.legend(fontsize=10)
 plt.show()

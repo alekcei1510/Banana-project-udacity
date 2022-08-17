@@ -88,7 +88,7 @@ You can explore more configurations and how it affects the performance of the ag
 
 ### Plot of rewards in the training step: 
 
-![Alt text](rewards.png?raw=true "Plot of Rewards")
+![Alt text](images/rewards.png?raw=true "Plot of Rewards")
 
 
 ## Play with the agent
@@ -98,7 +98,7 @@ You can run the agent trained with the script `run_agent.py`, the default config
 
 The expected output is:
  
-![](banana_project.png)
+![](images/banana_project.png)
 
 
 ## Ideas for Future Work

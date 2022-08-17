@@ -5,7 +5,7 @@ from collections import deque
 import torch
 
 # please do not modify the line below
-env = UnityEnvironment(file_name="deep-reinforcement-learning/p1_navigation/Banana_Windows_x86_64/Banana.exe")
+env = UnityEnvironment(file_name="Banana.app")
 
 # get the default brain
 brain_name = env.brain_names[0]

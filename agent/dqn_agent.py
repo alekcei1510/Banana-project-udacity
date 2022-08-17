@@ -1,7 +1,6 @@
 import numpy as np
 import random
 from collections import namedtuple, deque
-import wandb
 import torch.optim as optim
 
 import torch
